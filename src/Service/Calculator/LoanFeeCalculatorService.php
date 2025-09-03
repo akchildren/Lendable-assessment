@@ -12,8 +12,7 @@ final readonly class LoanFeeCalculatorService
     public function __construct(
         private TermBreakpointService $termBreakpointService,
         private int                   $roundingFeeInterval = 5
-    )
-    {
+    ) {
     }
 
     public function execute(LoanRequestData $loanData): LoanTotalResponseData
@@ -62,8 +61,7 @@ final readonly class LoanFeeCalculatorService
     private function roundFeeUpToNearestInterval(
         int $loanAmountInPence,
         int $feeInPence
-    ): int
-    {
+    ): int {
         $totalInPence = $loanAmountInPence + $feeInPence;
         $remainder = $totalInPence % $this->roundingFeeInterval;
         if ($remainder !== 0) {

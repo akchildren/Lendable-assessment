@@ -12,8 +12,7 @@ abstract class TermBreakpointService
      */
     public function __construct(
         private array $breakpoints
-    )
-    {
+    ) {
     }
 
     public function getSortedBreakdownForTerm(TermDuration $term): array
