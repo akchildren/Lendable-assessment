@@ -5,17 +5,17 @@ namespace Lendable\Interview\DataTransferObject\Loan;
 use Lendable\Interview\DataTransferObject\DataTransferObject;
 use Money\Money;
 
-final readonly class LoanTotalResponseData implements DataTransferObject
+final readonly class LoanFeeData implements DataTransferObject
 {
     public function __construct(
-        private Money $amount,
+        private Money $amountRequested,
         private Money $fee,
     ) {
     }
 
-    public function getAmount(): Money
+    public function getAmountRequested(): Money
     {
-        return $this->amount;
+        return $this->amountRequested;
     }
 
     public function getFee(): Money
@@ -34,7 +34,7 @@ final readonly class LoanTotalResponseData implements DataTransferObject
     public function toArray(): array
     {
         return [
-            'amount' => $this->amount,
+            'amount' => $this->amountRequested,
             'fee' => $this->fee,
         ];
     }
