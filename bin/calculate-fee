@@ -2,95 +2,51 @@
 <?php
 
 use Lendable\Interview\DataTransferObject\Loan\LoanRequestData;
-use Lendable\Interview\Enum\Term\TermDuration;
-use Lendable\Interview\Exception\Loan\InvalidLoanTermException;
-use Lendable\Interview\Exception\Validator\ValidationException;
-use Lendable\Interview\Service\Breakpoint\DummyBreakpointService;
+use Lendable\Interview\Service\Breakpoint\DummyLoanTermBreakpointService;
 use Lendable\Interview\Service\Calculator\LoanFeeCalculatorService;
-use Money\Currency;
-use Money\Money;
+use Lendable\Interview\Validator\LoanRequestValidator;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
-const EXPECTED_COMMAND_ARGUMENTS = 3;
-
 /**
  * Please note that you CAN modify this file in any way to suit your needs, but be advised that it MUST conform to
  * the contract specified in the README of the test.
  */
 try {
-    $minAmount = round($_ENV['MIN_AMOUNT'] ?? 1000, 2);
-    $maxAmount = round($_ENV['MAX_AMOUNT'] ?? 20000, 2);
-    $feeRoundingInterval = (int) ($_ENV['FEE_ROUNDING_INTERVAL'] ?? 5);
-    $currency = new Currency($_ENV['CURRENCY'] ?? 'GBP');
+    $fee = getFeeCalculator()
+        ->execute(new LoanRequestData(...getSanitisedArgs($argv)))
+        ->getFormattedFee();
 
-    if (count($argv) < EXPECTED_COMMAND_ARGUMENTS) {
-        throw new ValidationException(
-            sprintf(
-                'Expected %d arguments, %d given',
-                EXPECTED_COMMAND_ARGUMENTS,
-                count($argv) - 1
-            )
-        );
-    }
-
-    $amountString = $argv[1] ? sanitiseFloatString($argv[1]) : '';
-    if ($amountString < $minAmount || $amountString > $maxAmount) {
-        throw new ValidationException(
-            sprintf(
-                'Amount must be between %d and %d. %s was given',
-                $minAmount,
-                $maxAmount,
-                $amountString
-            )
-        );
-    }
-
-    $termString = filter_var($argv[2], FILTER_VALIDATE_INT) ?? '';
-    if (! $duration = TermDuration::tryFrom($termString)) {
-        throw new InvalidLoanTermException($termString);
-    }
-
-    $loan = new LoanRequestData(
-        amount: new Money($amountString, $currency),
-        term: $duration
-    );
-
-    $feeCalculator = new LoanFeeCalculatorService(
-            new DummyBreakpointService(),
-            $feeRoundingInterval
-    );
-
-    printf("%s%s",
-        $feeCalculator->execute($loan)->getFee()->getAmount(),
-        PHP_EOL
-    );
+    printf("%s%s", $fee, PHP_EOL); // stdout
 
     exit(0);
 } catch (Throwable $e) {
-    fwrite(STDERR,
+    fwrite(
+        STDERR,
         sprintf(
             'Error: %s%s',
             $e->getMessage(),
             PHP_EOL
         )
-    );
+    ); // stderr
     exit(1);
 }
 
-function sanitiseFloatString(
-        string $formatted,
-        string $thousand_sep = ',',
-        string $decimal_sep = '.'
-): float {
-    // Remove thousand separator
-    $cleaned = str_replace($thousand_sep, '', $formatted);
-    // Replace decimal separator with dot
-    if ($decimal_sep !== '.') {
-        $cleaned = str_replace($decimal_sep, '.', $cleaned);
-    }
-    return floatval($cleaned);
+function getSanitisedArgs(array $argv): array
+{
+    return new LoanRequestValidator(
+        amount: $argv[1] ?? null,
+        term: $argv[2] ?? null
+    )->validate()->safe();
+}
+
+function getFeeCalculator(): LoanFeeCalculatorService
+{
+    return new LoanFeeCalculatorService(
+        termBreakpointService: new DummyLoanTermBreakpointService(),
+        roundingFeeInterval: (int)($_ENV['FEE_ROUNDING_INTERVAL'] ?? 5)
+    );
 }
