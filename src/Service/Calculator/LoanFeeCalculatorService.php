@@ -2,27 +2,26 @@
 
 namespace Lendable\Interview\Service\Calculator;
 
+use Lendable\Interview\DataTransferObject\Loan\LoanFeeData;
 use Lendable\Interview\DataTransferObject\Loan\LoanRequestData;
-use Lendable\Interview\DataTransferObject\Loan\LoanTotalResponseData;
 use Lendable\Interview\Helper\MoneyHelper;
-use Lendable\Interview\Service\Breakpoint\LoanTermBreakpointService;
+use Lendable\Interview\Service\Loan\Term\Breakpoint\AbstractLoanTermBreakpointService;
 use Money\Money;
 
-final readonly class LoanFeeCalculatorService
+final readonly class LoanFeeCalculatorService implements LoanFeeCalculator
 {
     public function __construct(
-        private LoanTermBreakpointService $termBreakpointService,
-        private int $roundingFeeInterval = 5
+        private AbstractLoanTermBreakpointService $termBreakpointService,
     ) {
     }
 
-    public function execute(LoanRequestData $loanData): LoanTotalResponseData
+    public function execute(LoanRequestData $loanData): LoanFeeData
     {
-        $breakpoints = $this->termBreakpointService->getSortedBreakdownForTerm($loanData->getTerm());
+        $breakpoints = $this->termBreakpointService->getBreakpointsForTerm($loanData->getTerm());
         $fee = $this->findBreakpointFee($loanData, $breakpoints);
 
-        return new LoanTotalResponseData(
-            amount: $loanData->getAmount(),
+        return new LoanFeeData(
+            amountRequested: $loanData->getAmount(),
             fee: $this->roundFeeUpToNearestInterval($loanData->getAmountInPounds(), $fee),
         );
     }
@@ -58,8 +57,8 @@ final readonly class LoanFeeCalculatorService
 
     private static function calculateFeeByLinearInterpolation(
         float $loanAmount,
-        float $lowerAmount,
-        float $upperAmount,
+        int $lowerAmount,
+        int $upperAmount,
         float $feeLower,
         float $feeUpper
     ): float {
@@ -75,9 +74,11 @@ final readonly class LoanFeeCalculatorService
         float $interpolatedFeeInPounds
     ): Money {
         $roundedTotal = round($loanAmountInPounds + $interpolatedFeeInPounds, 0, PHP_ROUND_HALF_UP);
-        $remainder = $roundedTotal % $this->roundingFeeInterval;
+        $roundingFeeInterval = (int)($_ENV['FEE_ROUNDING_INTERVAL'] ?? 5);
+        $remainder = $roundedTotal % $roundingFeeInterval;
+
         if ($remainder !== 0) {
-            $interpolatedFeeInPounds += $this->roundingFeeInterval - $remainder;
+            $interpolatedFeeInPounds += $roundingFeeInterval - $remainder;
         }
         return MoneyHelper::parseFloat($interpolatedFeeInPounds);
     }
