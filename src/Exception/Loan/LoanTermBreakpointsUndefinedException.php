@@ -3,11 +3,11 @@
 namespace Lendable\Interview\Exception\Loan;
 
 use InvalidArgumentException;
-use Lendable\Interview\Enum\Term\TermDuration;
+use Lendable\Interview\Enum\Loan\Term\LoanTermDuration;
 
 final class LoanTermBreakpointsUndefinedException extends InvalidArgumentException
 {
-    public function __construct(TermDuration $term)
+    public function __construct(LoanTermDuration $term)
     {
         parent::__construct(
             sprintf(

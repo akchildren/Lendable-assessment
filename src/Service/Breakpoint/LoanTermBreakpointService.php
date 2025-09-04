@@ -2,10 +2,10 @@
 
 namespace Lendable\Interview\Service\Breakpoint;
 
-use Lendable\Interview\Enum\Term\TermDuration;
+use Lendable\Interview\Enum\Loan\Term\LoanTermDuration;
 use Lendable\Interview\Exception\Loan\LoanTermBreakpointsUndefinedException;
 
-abstract class TermBreakpointService
+abstract class LoanTermBreakpointService
 {
     /**
      * @var array<int, array<int, int>>
@@ -15,7 +15,7 @@ abstract class TermBreakpointService
     ) {
     }
 
-    public function getSortedBreakdownForTerm(TermDuration $term): array
+    public function getSortedBreakdownForTerm(LoanTermDuration $term): array
     {
         if (
             ! isset($this->breakpoints[$term->value])

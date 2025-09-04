@@ -3,12 +3,12 @@
 namespace Lendable\Interview\DataTransferObject\Term;
 
 use Lendable\Interview\DataTransferObject\DataTransferObject;
-use Lendable\Interview\Enum\Term\TermDuration;
+use Lendable\Interview\Enum\Loan\Term\LoanTermDuration;
 
 final readonly class TermData implements DataTransferObject
 {
     public function __construct(
-        private TermDuration $duration,
+        private LoanTermDuration $duration,
         private array $breakpoints,
     ) {
     }
