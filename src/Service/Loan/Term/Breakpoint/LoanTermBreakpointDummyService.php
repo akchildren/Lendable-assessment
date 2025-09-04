@@ -1,10 +1,10 @@
 <?php
 
-namespace Lendable\Interview\Service\Breakpoint;
+namespace Lendable\Interview\Service\Loan\Term\Breakpoint;
 
 use Lendable\Interview\Enum\Loan\Term\LoanTermDuration;
 
-final class DummyLoanTermBreakpointService extends LoanTermBreakpointService
+final class LoanTermBreakpointDummyService extends AbstractLoanTermBreakpointService
 {
     /**
      * @var array<int, array<int, int>>
