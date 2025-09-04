@@ -5,7 +5,7 @@ namespace Lendable\Interview\Unit\Command;
 use Lendable\Interview\Enum\Loan\Term\LoanTermDuration;
 use PHPUnit\Framework\TestCase;
 
-class CalculateFeeCommandTest extends TestCase
+final class CalculateFeeCommandTest extends TestCase
 {
     private const string PHP_BIN_CALCULATE_FEE = 'php bin/calculate-fee';
 
