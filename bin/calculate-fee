@@ -2,9 +2,10 @@
 <?php
 
 use Lendable\Interview\DataTransferObject\Loan\LoanRequestData;
-use Lendable\Interview\Service\Breakpoint\DummyLoanTermBreakpointService;
+use Lendable\Interview\Service\Calculator\LoanFeeCalculator;
 use Lendable\Interview\Service\Calculator\LoanFeeCalculatorService;
-use Lendable\Interview\Validator\LoanRequestValidator;
+use Lendable\Interview\Service\Loan\Term\Breakpoint\LoanTermBreakpointDummyService;
+use Lendable\Interview\Validator\Loan\LoanRequestValidator;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -43,10 +44,7 @@ function getSanitisedArgs(array $argv): array
     )->validate()->safe();
 }
 
-function getFeeCalculator(): LoanFeeCalculatorService
+function getFeeCalculator(): LoanFeeCalculator
 {
-    return new LoanFeeCalculatorService(
-        termBreakpointService: new DummyLoanTermBreakpointService(),
-        roundingFeeInterval: (int)($_ENV['FEE_ROUNDING_INTERVAL'] ?? 5)
-    );
+    return new LoanFeeCalculatorService(new LoanTermBreakpointDummyService());
 }
