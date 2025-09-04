@@ -3,14 +3,15 @@
 namespace Lendable\Interview\DataTransferObject\Loan;
 
 use Lendable\Interview\DataTransferObject\DataTransferObject;
-use Lendable\Interview\Enum\Term\TermDuration;
+use Lendable\Interview\Enum\Loan\Term\LoanTermDuration;
+use Lendable\Interview\Helper\MoneyHelper;
 use Money\Money;
 
 final readonly class LoanRequestData implements DataTransferObject
 {
     public function __construct(
         private Money $amount,
-        private TermDuration $term,
+        private LoanTermDuration $term,
     ) {
     }
 
@@ -19,7 +20,17 @@ final readonly class LoanRequestData implements DataTransferObject
         return $this->amount;
     }
 
-    public function getTerm(): TermDuration
+    public function getAmountInPence(): int
+    {
+        return (int) $this->amount->getAmount();
+    }
+
+    public function getAmountInPounds(): float
+    {
+        return MoneyHelper::toFloat($this->amount);
+    }
+
+    public function getTerm(): LoanTermDuration
     {
         return $this->term;
     }
