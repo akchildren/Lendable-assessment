@@ -1,11 +1,11 @@
 <?php
 
-namespace Lendable\Interview\Exception\Loan;
+namespace Lendable\Interview\Exception\Loan\Term;
 
 use InvalidArgumentException;
 use Lendable\Interview\Enum\Loan\Term\LoanTermDuration;
 
-final class InvalidLoanTermException extends InvalidArgumentException
+final class LoanTermInvalidException extends InvalidArgumentException
 {
     public function __construct(int $term)
     {
