@@ -2,15 +2,15 @@
 
 namespace Lendable\Interview\Service\Breakpoint;
 
-use Lendable\Interview\Enum\Term\TermDuration;
+use Lendable\Interview\Enum\Loan\Term\LoanTermDuration;
 
-final class DummyBreakpointService extends TermBreakpointService
+final class DummyLoanTermBreakpointService extends LoanTermBreakpointService
 {
     /**
      * @var array<int, array<int, int>>
      */
-    private static array $breakPoints = [
-        TermDuration::ANNUAL->value => [
+    private static array $breakpoints = [
+        LoanTermDuration::ANNUAL->value => [
             1000 => 50,
             2000 => 90,
             3000 => 90,
@@ -32,7 +32,7 @@ final class DummyBreakpointService extends TermBreakpointService
             19000 => 380,
             20000 => 400,
         ],
-        TermDuration::BIANNUAL->value => [
+        LoanTermDuration::BIANNUAL->value => [
             1000 => 70,
             2000 => 100,
             3000 => 120,
@@ -58,6 +58,6 @@ final class DummyBreakpointService extends TermBreakpointService
 
     public function __construct()
     {
-        parent::__construct(self::$breakPoints);
+        parent::__construct(self::$breakpoints);
     }
 }
