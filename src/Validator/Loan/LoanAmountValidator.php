@@ -1,37 +1,19 @@
 <?php
 
-namespace Lendable\Interview\Validator;
+namespace Lendable\Interview\Validator\Loan;
 
-use Lendable\Interview\Enum\Loan\Term\LoanTermDuration;
-use Lendable\Interview\Exception\Loan\InvalidLoanTermException;
 use Lendable\Interview\Exception\Validator\ValidationException;
 use Lendable\Interview\Helper\MoneyHelper;
 use Lendable\Interview\Helper\StringHelper;
+use Lendable\Interview\Validator\Validator;
 
-final class LoanRequestValidator implements Validator
+final class LoanAmountValidator implements Validator
 {
     public function __construct(
         private ?string $amount = null,
-        private mixed $term = null,
     ) {
     }
     public function validate(): static
-    {
-        self::validateAmount();
-        self::validateTerm();
-
-        return $this;
-    }
-
-    public function safe(): array
-    {
-        return [
-            'amount' => MoneyHelper::parseFloat($this->amount),
-            'term' => $this->term,
-        ];
-    }
-
-    private function validateAmount(): void
     {
         if (is_null($this->amount)) {
             throw new ValidationException('Amount is required');
@@ -52,18 +34,14 @@ final class LoanRequestValidator implements Validator
                 )
             );
         }
+
+        return $this;
     }
 
-    private function validateTerm(): void
+    public function safe(): array
     {
-        if (is_null($this->term)) {
-            throw new ValidationException('Term is required');
-        }
-
-        $term = (int) filter_var($this->term, FILTER_VALIDATE_INT);
-
-        if (! $this->term = LoanTermDuration::tryFrom($term)) {
-            throw new InvalidLoanTermException($this->term);
-        }
+        return [
+            'amount' => MoneyHelper::parseFloat($this->amount),
+        ];
     }
 }
