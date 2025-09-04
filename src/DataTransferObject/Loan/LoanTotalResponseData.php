@@ -23,6 +23,14 @@ final readonly class LoanTotalResponseData implements DataTransferObject
         return $this->fee;
     }
 
+    public function getFormattedFee(): string
+    {
+        return number_format(
+            bcdiv($this->fee->getAmount(), '100', 2),
+            2
+        );
+    }
+
     public function toArray(): array
     {
         return [
