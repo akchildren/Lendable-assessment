@@ -24,7 +24,7 @@ final class LoanFeeCalculatorServiceTest extends TestCase
         );
     }
 
-    public function test_calculates_and_rounds_fee_correctly(): void
+    public function testCalculatesAndRoundsFeeCorrectly(): void
     {
         $loanRequestData = new LoanApplicationRequestDto(
             amount: MoneyConverter::parseFloat(11500.00),

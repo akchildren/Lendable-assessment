@@ -15,7 +15,7 @@ final class LoanFeeInterpolatorServiceTest extends TestCase
         $this->interpolator = new LoanFeeInterpolatorService();
     }
 
-    public function test_interpolates_correctly_between_two_breakpoints(): void
+    public function testInterpolatesCorrectlyBetweenTwoBreakpoints(): void
     {
         $loanAmount = 12500.00;
         $breakpoints = [
@@ -30,7 +30,7 @@ final class LoanFeeInterpolatorServiceTest extends TestCase
         );
     }
 
-    public function test_returns_exact_fee_if_loan_matches_breakpoint(): void
+    public function testReturnsExactFeeIfLoanMatchesBreakpoint(): void
     {
         $loanAmount = 10000.00;
         $breakpoints = [
@@ -44,7 +44,7 @@ final class LoanFeeInterpolatorServiceTest extends TestCase
         );
     }
 
-    public function test_throws_exception_if_loan_amount_out_of_bounds(): void
+    public function testThrowsExceptionIfLoanAmountOutOfBounds(): void
     {
         $loanAmount = 9000.00;
         $breakpoints = [
@@ -56,7 +56,7 @@ final class LoanFeeInterpolatorServiceTest extends TestCase
         $this->interpolator->interpolate($loanAmount, $breakpoints);
     }
 
-    public function test_throws_exception_if_upper_bound_not_found(): void
+    public function testThrowsExceptionIfUpperBoundNotFound(): void
     {
         $loanAmount = 16000.00;
         $breakpoints = [
@@ -68,7 +68,7 @@ final class LoanFeeInterpolatorServiceTest extends TestCase
         $this->interpolator->interpolate($loanAmount, $breakpoints);
     }
 
-    public function test_interpolation_with_non_round_breakpoints(): void
+    public function testInterpolationWithNonRoundBreakpoints(): void
     {
         $loanAmount = 11250.00;
         $breakpoints = [
