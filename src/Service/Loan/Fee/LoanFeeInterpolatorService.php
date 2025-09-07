@@ -2,6 +2,8 @@
 
 namespace Lendable\Interview\Service\Loan\Fee;
 
+use InvalidArgumentException;
+
 final readonly class LoanFeeInterpolatorService implements LoanFeeInterpolatorInterface
 {
     public function interpolate(
@@ -24,6 +26,15 @@ final readonly class LoanFeeInterpolatorService implements LoanFeeInterpolatorIn
         );
     }
 
+    /**
+     * Finds the two breakpoints that surround the given loan amount.
+     * Assumes breakpoints are sorted by key (loan amount).
+     *
+     * @param float $loanAmount
+     * @param array<int, int> $breakpoints
+     * @return array{int, int} [lowerBreakpoint, upperBreakpoint]
+     * @throws InvalidArgumentException if no surrounding breakpoints are found
+     */
     private function findSurroundingBreakpoints(float $loanAmount, array $breakpoints): array
     {
         $keys = array_keys($breakpoints);
@@ -43,12 +54,22 @@ final readonly class LoanFeeInterpolatorService implements LoanFeeInterpolatorIn
         }
 
         if ($lower === null || $upper === null) {
-            throw new \InvalidArgumentException("Loan amount is out of interpolation bounds.");
+            throw new InvalidArgumentException("Loan amount is out of interpolation bounds.");
         }
 
         return [$lower, $upper];
     }
 
+    /**
+     * Performs linear interpolation between two breakpoints.
+     *
+     * @param float $loanAmount
+     * @param int $lowerBreakpointAmount
+     * @param int $upperBreakpointAmount
+     * @param int $lowerBreakpointFee
+     * @param int $upperBreakpointFee
+     * @return float The interpolated fee, rounded to 2 decimal places.
+     */
     private function linearInterpolation(
         float $loanAmount,
         int $lowerBreakpointAmount,

@@ -39,7 +39,7 @@ try {
 
     // Execute calculator
     $calculator = getFeeCalculator($roundingInterval);
-    $fee = $calculator->execute($loanData);
+    $fee = $calculator->calculate($loanData);
 
     printf(
         "%s%s",

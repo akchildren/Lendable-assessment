@@ -31,7 +31,7 @@ final class LoanFeeCalculatorServiceTest extends TestCase
             term: LoanTerm::BIANNUAL,
         );
 
-        $result = $this->calculator->execute($loanRequestData);
+        $result = $this->calculator->calculate($loanRequestData);
 
         $this->assertInstanceOf(Money::class, $result);
         $this->assertEquals('46000', $result->getAmount());

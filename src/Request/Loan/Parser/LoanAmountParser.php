@@ -3,10 +3,13 @@
 namespace Lendable\Interview\Request\Loan\Parser;
 
 use Lendable\Interview\Util\MoneyConverter;
-use Lendable\Interview\Util\NumericSanitizer;
+use Lendable\Interview\Util\NumericSanitiser;
 use Lendable\Interview\Request\ParserInterface;
 use Money\Money;
 
+/**
+ * Parses raw loan amount input into a Money object.
+ */
 final readonly class LoanAmountParser implements ParserInterface
 {
     public function __construct(
@@ -17,7 +20,7 @@ final readonly class LoanAmountParser implements ParserInterface
 
     public function parse(): Money
     {
-        $floatAmount = NumericSanitizer::sanitizeFloatString($this->rawAmount);
+        $floatAmount = NumericSanitiser::sanitizeFloatString($this->rawAmount);
         return MoneyConverter::parseFloat($floatAmount, $this->currencyCode);
     }
 }

@@ -9,13 +9,12 @@ interface RequestInterface
     /**
      * Validate the request input.
      *
-     * @return static Fluent interface
      * @throws ValidationException
      */
     public function validate(): static;
 
     /**
-     * Return normalized, domain-ready data.
+     * Return parsed, domain-ready data.
      *
      * @return array<string, mixed>
      */

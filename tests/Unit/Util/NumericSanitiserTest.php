@@ -2,20 +2,20 @@
 
 namespace Lendable\Interview\Unit\Util;
 
-use Lendable\Interview\Util\NumericSanitizer;
+use Lendable\Interview\Util\NumericSanitiser;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-final class NumericSanitizerTest extends TestCase
+final class NumericSanitiserTest extends TestCase
 {
     #[DataProvider('floatStringProvider')]
-    public function testSanitizeFloatString(
+    public function testSanitiseFloatString(
         string $input,
         float  $expected,
         string $thousandSep = ',',
         string $decimalSep = '.'
     ): void {
-        $result = NumericSanitizer::sanitizeFloatString($input, $thousandSep, $decimalSep);
+        $result = NumericSanitiser::sanitizeFloatString($input, $thousandSep, $decimalSep);
         $this->assertEquals($expected, $result);
     }
 

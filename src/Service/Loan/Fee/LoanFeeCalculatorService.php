@@ -16,7 +16,7 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
     ) {
     }
 
-    public function execute(LoanApplicationRequestDto $loanData): Money
+    public function calculate(LoanApplicationRequestDto $loanData): Money
     {
         $loanAmount = $loanData->amount;
         $term = $loanData->term;
@@ -27,6 +27,12 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
         return $this->roundFeeUpToNearestInterval($loanAmount, $interpolatedFee);
     }
 
+    /**
+     * Calculate the interpolated fee based on the loan amount and breakpoints.
+     * @param LoanApplicationRequestDto $loanData The loan application data containing amount and term.
+     * @param array<int, int> $breakpoints The breakpoints for interpolation.
+     * @return Money The interpolated fee as a Money object.
+     */
     private function calculateInterpolatedFee(
         LoanApplicationRequestDto $loanData,
         array                     $breakpoints
@@ -38,7 +44,11 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
     }
 
     /**
-     * @note: This rounding logic will allow for decimal loan amount requests (e.g. £1000.50)
+     * Rounds the fee up to the nearest specified interval.
+     * E.g., if the interval is £5, a fee of £12.34 would be rounded up to £15.00.
+     * @param Money $loanAmount The original loan amount.
+     * @param Money $interpolatedFee The interpolated fee before rounding.
+     * @return Money The rounded fee as a Money object.
      */
     private function roundFeeUpToNearestInterval(
         Money $loanAmount,

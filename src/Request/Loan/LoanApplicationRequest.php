@@ -8,6 +8,12 @@ use Lendable\Interview\Request\Loan\Validator\LoanAmountValidator;
 use Lendable\Interview\Request\Loan\Validator\LoanTermValidator;
 use Lendable\Interview\Request\RequestInterface;
 
+/**
+ * Loan application request handler.
+ *
+ * This class is responsible for validating and parsing loan application data.
+ * It uses specific validators and parsers for the amount and term fields.
+ */
 final readonly class LoanApplicationRequest implements RequestInterface
 {
     private array $validators;

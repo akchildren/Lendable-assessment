@@ -6,6 +6,9 @@ use Lendable\Interview\DataTransferObject\DataTransferObject;
 use Lendable\Interview\Enum\Loan\Term\LoanTerm;
 use Money\Money;
 
+/**
+ * Data Transfer Object for Loan Application Request
+ */
 final readonly class LoanApplicationRequestDto implements DataTransferObject
 {
     public function __construct(

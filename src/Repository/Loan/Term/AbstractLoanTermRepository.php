@@ -29,14 +29,4 @@ abstract readonly class AbstractLoanTermRepository implements LoanTermRepository
         ksort($breakpoints);
         return $breakpoints;
     }
-
-    public function getFee(int $amount, LoanTerm $term): ?int
-    {
-        return $this->breakpoints[$term->value][$amount] ?? null;
-    }
-
-    public function isValidAmountForTerm(int $amount, LoanTerm $term): bool
-    {
-        return isset($this->breakpoints[$term->value][$amount]);
-    }
 }

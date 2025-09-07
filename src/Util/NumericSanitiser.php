@@ -2,8 +2,11 @@
 
 namespace Lendable\Interview\Util;
 
-final readonly class NumericSanitizer
+final readonly class NumericSanitiser
 {
+    /**
+     * Sanitise formatted float string into strict float type
+     */
     public static function sanitizeFloatString(
         string $formatted,
         string $thousandSep = ',',

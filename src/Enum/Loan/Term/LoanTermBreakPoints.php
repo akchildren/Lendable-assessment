@@ -2,12 +2,18 @@
 
 namespace Lendable\Interview\Enum\Loan\Term;
 
+/**
+ * This class holds the breakpoints for different loan terms.
+ * The breakpoints define the interest rates based on the loan amount and term.
+ * @note This is strictly static data representation.
+ * @see LoanTerm
+ */
 final readonly class LoanTermBreakPoints
 {
     /**
      * @var array<int, array<int, int>>
      */
-    public const DATA = [
+    public const array DATA = [
         LoanTerm::ANNUAL->value => [
             1000 => 50,
             2000 => 90,
