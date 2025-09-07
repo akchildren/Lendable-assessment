@@ -1,27 +1,51 @@
 #!/usr/bin/env php
 <?php
 
-use Lendable\Interview\DataTransferObject\Loan\LoanRequestData;
-use Lendable\Interview\Service\Calculator\LoanFeeCalculator;
-use Lendable\Interview\Service\Calculator\LoanFeeCalculatorService;
-use Lendable\Interview\Service\Loan\Term\Breakpoint\LoanTermBreakpointDummyService;
-use Lendable\Interview\Validator\Loan\LoanRequestValidator;
+declare(strict_types=1);
+
+use Lendable\Interview\DataTransferObject\Loan\LoanApplicationRequestDto;
+use Lendable\Interview\Util\MoneyConverter;
+use Lendable\Interview\Repository\Loan\Term\LoanTermDummyRepository;
+use Lendable\Interview\Request\Loan\LoanApplicationRequest;
+use Lendable\Interview\Service\Loan\Fee\LoanFeeCalculatorInterface;
+use Lendable\Interview\Service\Loan\Fee\LoanFeeCalculatorService;
+use Lendable\Interview\Service\Loan\Fee\LoanFeeInterpolatorService;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
+$minAmount = isset($_ENV['MIN_LOAN_AMOUNT']) ? (float) $_ENV['MIN_LOAN_AMOUNT'] : 1000.0;
+$maxAmount = isset($_ENV['MAX_LOAN_AMOUNT']) ? (float) $_ENV['MAX_LOAN_AMOUNT'] : 20000.0;
+$roundingInterval = isset($_ENV['FEE_ROUNDING_INTERVAL']) ? (int) $_ENV['FEE_ROUNDING_INTERVAL'] : 5;
+
 /**
  * Please note that you CAN modify this file in any way to suit your needs, but be advised that it MUST conform to
  * the contract specified in the README of the test.
  */
 try {
-    $fee = getFeeCalculator()
-        ->execute(new LoanRequestData(...getSanitisedArgs($argv)))
-        ->getFormattedFee();
+    $request = new LoanApplicationRequest(
+        rawAmount: $argv[1] ?? null,
+        rawTerm: $argv[2] ?? null,
+        minAmount: $minAmount,
+        maxAmount: $maxAmount,
+    );
 
-    printf("%s%s", $fee, PHP_EOL); // stdout
+    $request->validate();
+
+    // Create DTO
+    $loanData = LoanApplicationRequestDto::fromArray($request->safe());
+
+    // Execute calculator
+    $calculator = getFeeCalculator($roundingInterval);
+    $fee = $calculator->execute($loanData);
+
+    printf(
+        "%s%s",
+        number_format(MoneyConverter::toFloat($fee), 2),
+        PHP_EOL
+    ); // stdout
 
     exit(0);
 } catch (Throwable $e) {
@@ -36,15 +60,15 @@ try {
     exit(1);
 }
 
-function getSanitisedArgs(array $argv): array
+/**
+ * @param int $roundingInterval
+ * @return LoanFeeCalculatorInterface
+ */
+function getFeeCalculator(int $roundingInterval): LoanFeeCalculatorInterface
 {
-    return new LoanRequestValidator(
-        amount: $argv[1] ?? null,
-        term: $argv[2] ?? null
-    )->validate()->safe();
-}
-
-function getFeeCalculator(): LoanFeeCalculator
-{
-    return new LoanFeeCalculatorService(new LoanTermBreakpointDummyService());
+    return new LoanFeeCalculatorService(
+        loanTermRepository: new LoanTermDummyRepository(),
+        interpolator: new LoanFeeInterpolatorService(),
+        roundingInterval: $roundingInterval
+    );
 }

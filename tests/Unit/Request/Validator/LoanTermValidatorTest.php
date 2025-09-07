@@ -1,0 +1,43 @@
+<?php
+
+namespace Lendable\Interview\Unit\Request\Validator;
+
+use Lendable\Interview\Request\Loan\Validator\LoanTermValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+final class LoanTermValidatorTest extends TestCase
+{
+    #[DataProvider('validTerms')]
+    public function testValidTerms(mixed $term): void
+    {
+        $validator = new LoanTermValidator($term);
+        $this->expectNotToPerformAssertions();
+        $validator->validate();
+    }
+
+    #[DataProvider('invalidTerms')]
+    public function testInvalidTerms(mixed $term): void
+    {
+        $this->expectException(\Throwable::class);
+        $validator = new LoanTermValidator($term);
+        $validator->validate();
+    }
+
+    public static function validTerms(): array
+    {
+        return [
+            [12],
+            [24],
+        ];
+    }
+
+    public static function invalidTerms(): array
+    {
+        return [
+            [null],
+            [36],        // not a preset term
+            ['abc'],     // strict type
+        ];
+    }
+}
