@@ -1,4 +1,5 @@
 {
+  "author": "Adam Children",
   "name": "lendable/interview",
   "type": "project",
   "bin": "/bin/calculate-fee",
