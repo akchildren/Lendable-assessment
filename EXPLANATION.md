@@ -64,7 +64,7 @@ bin/
 
 - LoanApplication – Domain model representing a loan request.
 - LoanApplicationRequestDto – DTO used to pass validated input into the calculator.
-- LoanTerm – Enum representing available terms (e.g., annual, biannual).
+- LoanTerm – Enum representing available terms (e.g., TWELVE_MONTH, TWENTY_FOUR_MONTH).
 - LoanFeeCalculatorService – Core service that calculates and rounds loan fees.
 - LoanTermRepositoryInterface – Repository abstraction for retrieving loan breakpoints.
 - LoanFeeInterpolatorService – Handles linear interpolation between fee breakpoints.
