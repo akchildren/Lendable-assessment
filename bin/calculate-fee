@@ -14,7 +14,7 @@ use Lendable\Interview\Util\MoneyConverter;
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__) );
-$dotenv->safeLoad();
+$dotenv->safeLoad(); // load .env file if exists, but do not throw if not to allow binary to work without it
 
 $minAmount = isset($_ENV['MIN_LOAN_AMOUNT']) ? (float) $_ENV['MIN_LOAN_AMOUNT'] : 1000.0;
 $maxAmount = isset($_ENV['MAX_LOAN_AMOUNT']) ? (float) $_ENV['MAX_LOAN_AMOUNT'] : 20000.0;
