@@ -28,7 +28,7 @@ final class LoanFeeCalculatorServiceTest extends TestCase
     {
         $loanRequestData = new LoanApplication(
             amount: MoneyConverter::parseFloat(11500.00),
-            term: LoanTerm::BIANNUAL,
+            term: LoanTerm::TWENTY_FOUR_MONTH,
         );
 
         $result = $this->calculator->calculate($loanRequestData);

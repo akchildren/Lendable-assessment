@@ -14,7 +14,7 @@ final readonly class LoanTermBreakPoints
      * @var array<int, array<int, int>>
      */
     public const array DATA = [
-        LoanTerm::ANNUAL->value => [
+        LoanTerm::TWELVE_MONTH->value => [
             1000 => 50,
             2000 => 90,
             3000 => 90,
@@ -36,7 +36,7 @@ final readonly class LoanTermBreakPoints
             19000 => 380,
             20000 => 400,
         ],
-        LoanTerm::BIANNUAL->value => [
+        LoanTerm::TWENTY_FOUR_MONTH->value => [
             1000 => 70,
             2000 => 100,
             3000 => 120,

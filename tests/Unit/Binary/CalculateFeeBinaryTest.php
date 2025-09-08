@@ -22,10 +22,10 @@ final class CalculateFeeBinaryTest extends TestCase
     public static function feeCommandProvider(): array
     {
         return [
-            'Example: Annual 19,250.00' => ['19,250.00', LoanTerm::ANNUAL->value, '385.00'],
-            'Example: Biannual 11,500.00' => ['11,500.00', LoanTerm::BIANNUAL->value, '460.00'],
-            'Standard Float' => ['11500.00', LoanTerm::BIANNUAL->value, '460.00'],
-            'Integer' => ['11500', LoanTerm::BIANNUAL->value, '460.00'],
+            'Example: TWELVE MONTH 19,250.00' => ['19,250.00', LoanTerm::TWELVE_MONTH->value, '385.00'],
+            'Example: TWENTY FOUR MONTH 11,500.00' => ['11,500.00', LoanTerm::TWENTY_FOUR_MONTH->value, '460.00'],
+            'Standard Float' => ['11500.00', LoanTerm::TWENTY_FOUR_MONTH->value, '460.00'],
+            'Integer' => ['11500', LoanTerm::TWENTY_FOUR_MONTH->value, '460.00'],
         ];
     }
 

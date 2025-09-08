@@ -21,10 +21,10 @@ final class LoanTermParserTest extends TestCase
     public static function validTermProvider(): array
     {
         return [
-            'annual string' => ['12', LoanTerm::ANNUAL],
-            'biannual string' => ['24', LoanTerm::BIANNUAL],
-            'annual int' => [12, LoanTerm::ANNUAL],
-            'biannual int' => [24, LoanTerm::BIANNUAL],
+            'TWELVE MONTH string' => ['12', LoanTerm::TWELVE_MONTH],
+            'TWENTY FOUR MONTH string' => ['24', LoanTerm::TWENTY_FOUR_MONTH],
+            'annual int' => [12, LoanTerm::TWELVE_MONTH],
+            'biannual int' => [24, LoanTerm::TWENTY_FOUR_MONTH],
         ];
     }
 }

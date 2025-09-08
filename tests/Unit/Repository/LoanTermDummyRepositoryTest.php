@@ -17,7 +17,7 @@ final class LoanTermDummyRepositoryTest extends TestCase
 
     public function testGetBreakpointsForValidAnnualTerm(): void
     {
-        $breakpoints = $this->repository->getBreakpointsForTerm(LoanTerm::ANNUAL);
+        $breakpoints = $this->repository->getBreakpointsForTerm(LoanTerm::TWELVE_MONTH);
 
         $this->assertIsArray($breakpoints);
         $this->assertArrayHasKey(1000, $breakpoints);
@@ -27,7 +27,7 @@ final class LoanTermDummyRepositoryTest extends TestCase
 
     public function testGetBreakpointsForValidBiannualTerm(): void
     {
-        $breakpoints = $this->repository->getBreakpointsForTerm(LoanTerm::BIANNUAL);
+        $breakpoints = $this->repository->getBreakpointsForTerm(LoanTerm::TWENTY_FOUR_MONTH);
 
         $this->assertIsArray($breakpoints);
         $this->assertArrayHasKey(1000, $breakpoints);
@@ -37,7 +37,7 @@ final class LoanTermDummyRepositoryTest extends TestCase
 
     public function testBreakpointsStructure(): void
     {
-        foreach ([LoanTerm::ANNUAL, LoanTerm::BIANNUAL] as $term) {
+        foreach ([LoanTerm::TWELVE_MONTH, LoanTerm::TWENTY_FOUR_MONTH] as $term) {
             $breakpoints = $this->repository->getBreakpointsForTerm($term);
 
             foreach ($breakpoints as $amount => $fee) {
