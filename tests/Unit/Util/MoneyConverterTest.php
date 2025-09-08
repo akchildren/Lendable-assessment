@@ -25,8 +25,7 @@ final class MoneyConverterTest extends TestCase
         int    $amountInPence,
         float  $expectedFloat,
         string $currency = 'GBP'
-    ): void
-    {
+    ): void {
         $money = new Money($amountInPence, new Currency($currency));
         $float = MoneyConverter::toFloat($money);
 
