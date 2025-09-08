@@ -10,9 +10,9 @@ final readonly class MoneyConverter
     /**
      * Parse a float amount into a Money object.
      */
-    public static function parseFloat(float $amount, string $currencyCode = 'GBP'): Money
+    public static function parseFloat(string|float $amount, string $currencyCode = 'GBP'): Money
     {
-        $amountInPence = (int) bcmul((string) $amount, '100', 0);
+        $amountInPence = (int) ceil(bcmul((string) $amount, '100', 2));
         return new Money($amountInPence, new Currency($currencyCode));
     }
 

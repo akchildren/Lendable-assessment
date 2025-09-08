@@ -13,23 +13,11 @@ final readonly class NumericSanitiser
         string $thousandSep = ',',
         string $decimalSep = '.'
     ): string {
-        // Remove thousands separator
-        if ($thousandSep !== '') {
-            $formatted = str_replace($thousandSep, '', $formatted);
+        $cleaned = str_replace($thousandSep, '', $formatted);
+        if ($decimalSep !== '.') {
+            $cleaned = str_replace($decimalSep, '.', $cleaned);
         }
 
-        // Normalize decimal separator
-        if ($decimalSep !== '.' && $decimalSep !== '') {
-            $formatted = str_replace($decimalSep, '.', $formatted);
-        }
-
-        // Keep digits, one dot, and an optional leading minus
-        $formatted = preg_replace('/[^0-9.\-]/', '', $formatted);
-
-        // Normalize multiple dots or misplaced minus signs
-        $formatted = preg_replace('/(?!^)-/', '', $formatted); // Remove all but leading minus
-        $formatted = preg_replace('/(?<=\..*)\./', '', $formatted); // Remove extra dots after first
-
-        return (string) $formatted;
+        return preg_replace('/[^\d.-]/', '', $cleaned); // strip stray chars
     }
 }
