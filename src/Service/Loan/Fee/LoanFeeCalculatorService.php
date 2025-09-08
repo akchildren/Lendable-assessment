@@ -20,7 +20,6 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
     {
         $loanAmount = $loanData->amount;
         $breakpoints = $this->loanTermRepository->getBreakpointsForTerm($loanData->term);
-
         $interpolatedFee = $this->interpolatedFee($loanAmount, $breakpoints);
 
         return $this->roundedFee($loanAmount, $interpolatedFee);
@@ -28,7 +27,7 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
 
     /**
      * Calculate the interpolated fee based on the loan amount and breakpoints.
-     * @param LoanApplicationRequestDto $loanData The loan application data containing amount and term.
+     * @param Money $loanAmount The loan amount requested
      * @param array<int, int> $breakpoints The breakpoints for interpolation.
      * @return Money The interpolated fee as a Money object.
      */
@@ -44,12 +43,12 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
      * Rounds the fee up to the nearest specified interval.
      * E.g., if the interval is £5, a fee of £12.34 would be rounded up to £15.00.
      * @param Money $loanAmount The original loan amount.
-     * @param Money $interpolatedFee The interpolated fee before rounding.
+     * @param Money $fee The interpolated fee before rounding.
      * @return Money The rounded fee as a Money object.
      */
     private function roundedFee(Money $loanAmount, Money $fee): Money
     {
-        $interval = $this->roundingInterval * 100; // to pence
+        $interval = MoneyConverter::parseFloat($this->roundingInterval)->getAmount(); // to pence
         $total = (int) $loanAmount->getAmount() + (int) $fee->getAmount();
         $remainder = $total % $interval;
 
