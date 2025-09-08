@@ -12,6 +12,10 @@ use Money\Money;
  */
 final readonly class LoanAmountParser implements ParserInterface
 {
+    /**
+     * @param non-empty-string $rawAmount
+     * @param non-empty-string $currencyCode
+     */
     public function __construct(
         private string $rawAmount,
         private string $currencyCode = 'GBP'

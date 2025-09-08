@@ -13,8 +13,8 @@ use Lendable\Interview\Enum\Loan\Term\LoanTermBreakPoints;
  */
 final class LoanTermDummyRepository extends AbstractLoanTermRepository
 {
-    protected function fetchBreakpoints(LoanTerm $term): ?array
+    protected function fetchBreakpoints(LoanTerm $term): array
     {
-        return LoanTermBreakpoints::DATA[$term->value] ?? null;
+        return LoanTermBreakpoints::DATA[$term->value];
     }
 }

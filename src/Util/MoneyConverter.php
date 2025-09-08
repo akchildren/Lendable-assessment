@@ -9,11 +9,14 @@ final readonly class MoneyConverter
 {
     /**
      * Parse a float amount into a Money object.
+     * @param non-empty-string $currencyCode
      */
     public static function parseFloat(string|float $amount, string $currencyCode = 'GBP'): Money
     {
-        $amountInPence = (int) ceil(bcmul((string) $amount, '100', 2));
-        return new Money($amountInPence, new Currency($currencyCode));
+        $amountInPence = ceil(
+            (float) bcmul((string) $amount, '100', 2)
+        );
+        return new Money((int) $amountInPence, new Currency($currencyCode));
     }
 
     /**
@@ -22,6 +25,6 @@ final readonly class MoneyConverter
      */
     public static function toFloat(Money $money): float
     {
-        return (float)bcdiv($money->getAmount(), '100', 2);
+        return (float) bcdiv($money->getAmount(), '100', 2);
     }
 }

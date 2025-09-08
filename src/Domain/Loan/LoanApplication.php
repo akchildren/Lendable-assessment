@@ -24,6 +24,9 @@ final readonly class LoanApplication implements DomainModelInterface
         return $this->term;
     }
 
+    /**
+     * @return array<string, Money|LoanTerm>
+     */
     public function toArray(): array
     {
         return [

@@ -16,6 +16,9 @@ use Lendable\Interview\Request\RequestInterface;
  */
 final readonly class LoanApplicationRequest implements RequestInterface
 {
+    /**
+     * @var array <string, mixed> List of validators to be applied to the request data.
+     */
     private array $validators;
 
     public function __construct(
