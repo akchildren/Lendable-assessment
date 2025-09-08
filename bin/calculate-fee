@@ -25,6 +25,7 @@ $roundingInterval = isset($_ENV['FEE_ROUNDING_INTERVAL']) ? (int) $_ENV['FEE_ROU
  * the contract specified in the README of the test.
  */
 try {
+    // Parse and validate request
     $request = new LoanApplicationRequest(
         rawAmount: $argv[1] ?? null,
         rawTerm: $argv[2] ?? null,
