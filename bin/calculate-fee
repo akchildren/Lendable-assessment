@@ -13,7 +13,7 @@ use Lendable\Interview\Util\MoneyConverter;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__) );
 $dotenv->safeLoad();
 
 $minAmount = isset($_ENV['MIN_LOAN_AMOUNT']) ? (float) $_ENV['MIN_LOAN_AMOUNT'] : 1000.0;
