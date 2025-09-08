@@ -12,19 +12,18 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
     public function __construct(
         private LoanTermRepositoryInterface  $loanTermRepository,
         private LoanFeeInterpolatorInterface $interpolator,
-        private int $roundingInterval = 5
+        private int $roundingInterval = 5 // in major units (e.g., £5)
     ) {
     }
 
     public function calculate(LoanApplicationRequestDto $loanData): Money
     {
         $loanAmount = $loanData->amount;
-        $term = $loanData->term;
+        $breakpoints = $this->loanTermRepository->getBreakpointsForTerm($loanData->term);
 
-        $breakpoints = $this->loanTermRepository->getBreakpointsForTerm($term);
+        $interpolatedFee = $this->interpolatedFee($loanAmount, $breakpoints);
 
-        $interpolatedFee = $this->calculateInterpolatedFee($loanData, $breakpoints);
-        return $this->roundFeeUpToNearestInterval($loanAmount, $interpolatedFee);
+        return $this->roundedFee($loanAmount, $interpolatedFee);
     }
 
     /**
@@ -33,14 +32,12 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
      * @param array<int, int> $breakpoints The breakpoints for interpolation.
      * @return Money The interpolated fee as a Money object.
      */
-    private function calculateInterpolatedFee(
-        LoanApplicationRequestDto $loanData,
-        array                     $breakpoints
-    ): Money {
-        $loanAmount = MoneyConverter::toFloat($loanData->amount);
-        $interpolated = $this->interpolator->interpolate($loanAmount, $breakpoints);
+    private function interpolatedFee(Money $loanAmount, array $breakpoints): Money
+    {
+        $amountAsFloat = MoneyConverter::toFloat($loanAmount);
+        $feeAsFloat = $this->interpolator->interpolate($amountAsFloat, $breakpoints);
 
-        return MoneyConverter::parseFloat($interpolated);
+        return MoneyConverter::parseFloat($feeAsFloat);
     }
 
     /**
@@ -50,22 +47,16 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
      * @param Money $interpolatedFee The interpolated fee before rounding.
      * @return Money The rounded fee as a Money object.
      */
-    private function roundFeeUpToNearestInterval(
-        Money $loanAmount,
-        Money $interpolatedFee
-    ): Money {
-        $intervalPence = (int)($this->roundingInterval * 100); // £5 = 500p
-
-        $loanPence = (int)$loanAmount->getAmount();
-        $feePence = (int)$interpolatedFee->getAmount();
-
-        $totalPence = $loanPence + $feePence;
-        $remainder = $totalPence % $intervalPence;
+    private function roundedFee(Money $loanAmount, Money $fee): Money
+    {
+        $interval = $this->roundingInterval * 100; // to pence
+        $total = (int) $loanAmount->getAmount() + (int) $fee->getAmount();
+        $remainder = $total % $interval;
 
         if ($remainder !== 0) {
-            $feePence += ($intervalPence - $remainder);
+            $fee = MoneyConverter::parseFloat(($fee->getAmount() + ($interval - $remainder)) / 100);
         }
 
-        return MoneyConverter::parseFloat($feePence / 100);
+        return $fee;
     }
 }
