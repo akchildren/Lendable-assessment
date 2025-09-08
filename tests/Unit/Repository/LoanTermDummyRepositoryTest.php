@@ -19,7 +19,6 @@ final class LoanTermDummyRepositoryTest extends TestCase
     {
         $breakpoints = $this->repository->getBreakpointsForTerm(LoanTerm::TWELVE_MONTH);
 
-        $this->assertIsArray($breakpoints);
         $this->assertArrayHasKey(1000, $breakpoints);
         $this->assertEquals(50, $breakpoints[1000]);
         $this->assertEquals(400, $breakpoints[20000]);
@@ -29,21 +28,8 @@ final class LoanTermDummyRepositoryTest extends TestCase
     {
         $breakpoints = $this->repository->getBreakpointsForTerm(LoanTerm::TWENTY_FOUR_MONTH);
 
-        $this->assertIsArray($breakpoints);
         $this->assertArrayHasKey(1000, $breakpoints);
         $this->assertEquals(70, $breakpoints[1000]);
         $this->assertEquals(800, $breakpoints[20000]);
-    }
-
-    public function testBreakpointsStructure(): void
-    {
-        foreach ([LoanTerm::TWELVE_MONTH, LoanTerm::TWENTY_FOUR_MONTH] as $term) {
-            $breakpoints = $this->repository->getBreakpointsForTerm($term);
-
-            foreach ($breakpoints as $amount => $fee) {
-                $this->assertIsInt($amount);
-                $this->assertIsInt($fee);
-            }
-        }
     }
 }

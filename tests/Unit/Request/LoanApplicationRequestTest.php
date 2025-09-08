@@ -29,6 +29,9 @@ final class LoanApplicationRequestTest extends TestCase
         $request->validate();
     }
 
+    /**
+     * @return array<int, list<int|string>>
+     */
     public static function validInputs(): array
     {
         return [
@@ -38,6 +41,9 @@ final class LoanApplicationRequestTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<int, list<int|string|null>>
+     */
     public static function invalidInputs(): array
     {
         return [

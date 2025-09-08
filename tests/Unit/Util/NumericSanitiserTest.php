@@ -19,6 +19,9 @@ final class NumericSanitiserTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * @return array<string, list<string|float|string>>
+     */
     public static function floatStringProvider(): array
     {
         return [

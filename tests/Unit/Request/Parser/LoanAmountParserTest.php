@@ -19,6 +19,9 @@ final class LoanAmountParserTest extends TestCase
         $this->assertEquals($expectedPence, $amount->getAmount());
     }
 
+    /**
+     * @return array<string, list<float|int|string>>
+     */
     public static function validAmountProvider(): array
     {
         return [

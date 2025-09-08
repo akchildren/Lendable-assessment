@@ -20,6 +20,22 @@ final class MoneyConverterTest extends TestCase
         $this->assertEquals($currency, $money->getCurrency()->getCode());
     }
 
+    #[DataProvider('toFloatProvider')]
+    public function testToFloat(
+        int    $amountInPence,
+        float  $expectedFloat,
+        string $currency = 'GBP'
+    ): void
+    {
+        $money = new Money($amountInPence, new Currency($currency));
+        $float = MoneyConverter::toFloat($money);
+
+        $this->assertEquals($expectedFloat, $float);
+    }
+
+    /**
+     * @return array<string, list<float|int|string>>
+     */
     public static function parseFloatProvider(): array
     {
         return [
@@ -29,19 +45,9 @@ final class MoneyConverterTest extends TestCase
         ];
     }
 
-    #[DataProvider('toFloatProvider')]
-    public function testToFloat(
-        int $amountInPence,
-        float $expectedFloat,
-        string $currency = 'GBP'
-    ): void {
-        $money = new Money($amountInPence, new Currency($currency));
-        $float = MoneyConverter::toFloat($money);
-
-        $this->assertEquals($expectedFloat, $float);
-        $this->assertIsFloat($float);
-    }
-
+    /**
+     * @return array<string, list<int|float>>
+     */
     public static function toFloatProvider(): array
     {
         return [

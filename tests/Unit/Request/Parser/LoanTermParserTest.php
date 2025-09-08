@@ -18,6 +18,9 @@ final class LoanTermParserTest extends TestCase
         $this->assertEquals($expectedTerm, $term);
     }
 
+    /**
+     * @return array<string, list<int|LoanTerm|string>>
+     */
     public static function validTermProvider(): array
     {
         return [

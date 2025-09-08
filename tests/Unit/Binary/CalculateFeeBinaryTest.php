@@ -19,6 +19,9 @@ final class CalculateFeeBinaryTest extends TestCase
         $this->assertStringContainsString($expectedOutput, $output);
     }
 
+    /**
+     * @return array<string, array{0: string, 1: int, 2: string}>
+     */
     public static function feeCommandProvider(): array
     {
         return [
@@ -29,7 +32,7 @@ final class CalculateFeeBinaryTest extends TestCase
         ];
     }
 
-    private static function getCommandString(string $amount, string $term): string
+    private static function getCommandString(string $amount, int $term): string
     {
         return sprintf('%s %s %s', self::PHP_BIN_CALCULATE_FEE, $amount, $term);
     }

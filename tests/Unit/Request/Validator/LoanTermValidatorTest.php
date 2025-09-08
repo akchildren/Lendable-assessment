@@ -24,6 +24,9 @@ final class LoanTermValidatorTest extends TestCase
         $validator->validate();
     }
 
+    /**
+     * @return array<int, list<int>>
+     */
     public static function validTerms(): array
     {
         return [
@@ -32,6 +35,9 @@ final class LoanTermValidatorTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<int, list<mixed>>
+     */
     public static function invalidTerms(): array
     {
         return [
