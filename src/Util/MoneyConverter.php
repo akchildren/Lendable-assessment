@@ -12,12 +12,13 @@ final readonly class MoneyConverter
      */
     public static function parseFloat(float $amount, string $currencyCode = 'GBP'): Money
     {
-        $amountInPence = (int)round($amount * 100);
+        $amountInPence = (int) bcmul((string) $amount, '100', 0);
         return new Money($amountInPence, new Currency($currencyCode));
     }
 
     /**
      * Convert a Money object to a float amount.
+     * @note Future improvement: This function assumes the currency has two decimal places, i.e., divisor of 100. but not all currencies support this
      */
     public static function toFloat(Money $money): float
     {
