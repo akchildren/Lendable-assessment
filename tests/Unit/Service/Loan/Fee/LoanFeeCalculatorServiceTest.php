@@ -2,12 +2,12 @@
 
 namespace Lendable\Interview\Unit\Service\Loan\Fee;
 
-use Lendable\Interview\DataTransferObject\Loan\LoanApplicationRequestDto;
+use Lendable\Interview\Domain\Loan\LoanApplication;
 use Lendable\Interview\Enum\Loan\Term\LoanTerm;
-use Lendable\Interview\Util\MoneyConverter;
 use Lendable\Interview\Repository\Loan\Term\LoanTermDummyRepository;
 use Lendable\Interview\Service\Loan\Fee\LoanFeeCalculatorService;
 use Lendable\Interview\Service\Loan\Fee\LoanFeeInterpolatorService;
+use Lendable\Interview\Util\MoneyConverter;
 use Money\Money;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +26,7 @@ final class LoanFeeCalculatorServiceTest extends TestCase
 
     public function testCalculatesAndRoundsFeeCorrectly(): void
     {
-        $loanRequestData = new LoanApplicationRequestDto(
+        $loanRequestData = new LoanApplication(
             amount: MoneyConverter::parseFloat(11500.00),
             term: LoanTerm::BIANNUAL,
         );
