@@ -5,28 +5,29 @@ namespace Lendable\Interview\Repository\Loan\Term;
 use Lendable\Interview\Enum\Loan\Term\LoanTerm;
 use Lendable\Interview\Exception\Loan\Term\LoanTermBreakpointsUndefinedException;
 
-abstract readonly class AbstractLoanTermRepository implements LoanTermRepositoryInterface
+abstract class AbstractLoanTermRepository implements LoanTermRepositoryInterface
 {
     /**
-     * @var array<int, array<int, int>>  // [LoanTerm->value => [amount => fee]]
+     * Implementations must fetch breakpoints from a persistence layer
+     *
+     * @return array<int, int> [amount => fee]
      */
-    protected array $breakpoints;
+    abstract protected function fetchBreakpoints(LoanTerm $term): ?array;
 
     /**
-     * @param array<int, array<int, int>> $breakpoints
+     * Get all breakpoints for a given term duration in key sorted order ASC
+     * @throws LoanTermBreakpointsUndefinedException
      */
-    public function __construct(array $breakpoints)
+    final public function getBreakpointsForTerm(LoanTerm $term): array
     {
-        $this->breakpoints = $breakpoints;
-    }
+        $breakpoints = $this->fetchBreakpoints($term);
 
-    public function getBreakpointsForTerm(LoanTerm $term): array
-    {
-        if (!isset($this->breakpoints[$term->value])) {
+        if ($breakpoints === null) {
             throw new LoanTermBreakpointsUndefinedException($term);
         }
-        $breakpoints = $this->breakpoints[$term->value];
+
         ksort($breakpoints);
+
         return $breakpoints;
     }
 }

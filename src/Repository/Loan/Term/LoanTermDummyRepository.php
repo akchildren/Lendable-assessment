@@ -2,6 +2,7 @@
 
 namespace Lendable\Interview\Repository\Loan\Term;
 
+use Lendable\Interview\Enum\Loan\Term\LoanTerm;
 use Lendable\Interview\Enum\Loan\Term\LoanTermBreakPoints;
 
 /**
@@ -10,10 +11,10 @@ use Lendable\Interview\Enum\Loan\Term\LoanTermBreakPoints;
  * This repository uses predefined data from LoanTermBreakpoints.
  * @note This is a dummy implementation and should be replaced with a real data source.
  */
-final readonly class LoanTermDummyRepository extends AbstractLoanTermRepository
+final class LoanTermDummyRepository extends AbstractLoanTermRepository
 {
-    public function __construct()
+    protected function fetchBreakpoints(LoanTerm $term): ?array
     {
-        parent::__construct(LoanTermBreakpoints::DATA);
+        return LoanTermBreakpoints::DATA[$term->value] ?? null;
     }
 }
