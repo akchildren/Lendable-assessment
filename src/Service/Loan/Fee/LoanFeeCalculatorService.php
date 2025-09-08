@@ -2,9 +2,9 @@
 
 namespace Lendable\Interview\Service\Loan\Fee;
 
-use Lendable\Interview\DataTransferObject\Loan\LoanApplicationRequestDto;
-use Lendable\Interview\Util\MoneyConverter;
+use Lendable\Interview\Domain\Loan\LoanApplication;
 use Lendable\Interview\Repository\Loan\Term\LoanTermRepositoryInterface;
+use Lendable\Interview\Util\MoneyConverter;
 use Money\Money;
 
 final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterface
@@ -16,10 +16,10 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
     ) {
     }
 
-    public function calculate(LoanApplicationRequestDto $loanData): Money
+    public function calculate(LoanApplication $loanApplication): Money
     {
-        $loanAmount = $loanData->amount;
-        $breakpoints = $this->loanTermRepository->getBreakpointsForTerm($loanData->term);
+        $loanAmount = $loanApplication->getAmount();
+        $breakpoints = $this->loanTermRepository->getBreakpointsForTerm($loanApplication->getTerm());
         $interpolatedFee = $this->interpolatedFee($loanAmount, $breakpoints);
 
         return $this->roundedFee($loanAmount, $interpolatedFee);
