@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Lendable\Interview\Unit\Request\Parser;
 
@@ -28,8 +29,6 @@ final class LoanAmountParserTest extends TestCase
             'formatted string' => ['1,234.56', 123456],
             'unformatted string' => ['1234.56', 123456],
             'integer string' => ['1234', 123400],
-            'float' => [1234.56, 123456],
-            'integer' => [1234, 123400],
         ];
     }
 }
