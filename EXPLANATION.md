@@ -85,31 +85,30 @@ bin/
 Results on submission from running tests, static analysis, and code style checks:
 
 ```bash
-vendor/bin/phpunit
 PHPUnit 12.3.8 by Sebastian Bergmann and contributors.
 
 Runtime:       PHP 8.4.12
 Configuration: /Users/adamchildren/Documents/GitHub/Lendable-assessment/phpunit.xml
 
-....................................................              52 / 52 (100%)
+.......................................................           55 / 55 (100%)
 
-Time: 00:00.200, Memory: 16.00 MB
+Time: 00:00.204, Memory: 16.00 MB
 
-OK (52 tests, 63 assertions)
+OK (55 tests, 72 assertions)
 ```
 
 ```bash
 vendor/bin/phpstan analyse -l 6 src
- 24/24 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
-                                                                                                 
- [OK] No errors  
+ 26/26 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+                                                                                                            
+ [OK] No errors      
 ```
 
 ```bash
 vendor/bin/phpstan analyse -l 6 tests
- 24/24 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
-                                                                                                 
- [OK] No errors  
+ 12/12 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+                                                                                                              
+ [OK] No error
 ```
 
 ```bash
@@ -121,10 +120,9 @@ Running analysis on 1 core sequentially.
 You can enable parallel runner and speed up the analysis! Please see usage docs for more information.
 Loaded config default.
 Using cache file ".php-cs-fixer.cache".
- 24/24 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+ 26/26 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
 
-
-Fixed 0 of 24 files in 0.003 seconds, 16.00 MB memory used
+Fixed 0 of 26 files in 0.011 seconds, 16.00 MB memory used
 ```
 
 ```bash
@@ -136,8 +134,8 @@ Running analysis on 1 core sequentially.
 You can enable parallel runner and speed up the analysis! Please see usage docs for more information.
 Loaded config default.
 Using cache file ".php-cs-fixer.cache".
- 11/11 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+ 12/12 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
 
 
-Fixed 0 of 11 files in 0.002 seconds, 16.00 MB memory used
+Fixed 0 of 12 files in 0.002 seconds, 16.00 MB memory used
 ```
