@@ -15,8 +15,8 @@
         </include>
     </source>
     <php>
-        <env name="MINIMUM_LOAN_AMOUNT" value="1000"/>
-        <env name="MAXIMUM_LOAN_AMOUNT" value="20000"/>
+        <env name="MIN_LOAN_AMOUNT" value="1000"/>
+        <env name="MAX_LOAN_AMOUNT" value="20000"/>
         <env name="FEE_ROUNDING_INTERVAL" value="5"/>
     </php>
 </phpunit>
