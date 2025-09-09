@@ -1,137 +1,149 @@
-Lendable Interview Test - Fee Calculation
-=========================================
+# Loan Fee Calculator
 
-## Background
+A PHP 8.4 binary that calculates loan fees based on the requested loan amount and loan term duration.
 
-This test is designed to evaluate your problem-solving approach and engineering ability. Design your solution to
-demonstrate your knowledge of OOP concepts, SOLID principles, design patterns, domain-driven design and clean and
-extensible architecture.
+## Features
+- Calculate loan fees for supported loan terms.
+- Configurable fee rounding and validation rules.
+- Handles input parsing and validation.
+- Uses moneyphp/money for accurate monetary calculations.
+- Built with domain design concepts.
+- Fully covered by automated unit tests and static analysis tools.
 
-A strong submission will demonstrate a solid grasp of these fundamentals as a set of well-designed classes and will be
-documented and executable with elegant tests.
+## Requirements
+- PHP 8.4+
+- Composer
+- moneyphp/money for monetary calculations
+- vlucas/phpdotenv for environment configuration
+- PHPUnit for tests
+- PhpStan for static analysis (Level 6)
+- PHP-CS-Fixer for code style
 
-Please note that the main interface of this test is a single console script entrypoint and it is used to review your
-solution programmatically. The `bin/calculate-fee` command **SHOULD** only be used for bootstrapping and running your
-solution, therefore is expected most of your code will live in the `src` and `tests` folders.
+## Installation
+```
+git clone <repository-url>
+cd loan-fee-calculator
+composer install
+cp .env.example .env # create .env from example (optional as default values are set)
+```
+## Configuration (Optional)
 
-You **MAY** use any libraries that add value to your solution but please **DO NOT** include a whole web framework (AKA
-Symfony, Laravel, etc) into the test as it is not needed. We don't expect you to use any infrastructure,
-like a database, for this test.
+The application can be configured via an `.env` file :
+```
+MIN_LOAN_AMOUNT=1000
+MAX_LOAN_AMOUNT=20000
+FEE_ROUNDING_INTERVAL=5
+```
 
-You **MAY** provide us with a development docker (compose) setup if you are comfortable writing your code in a
-containerized environment and if you want to showcase your docker abilities; but please note this is for your own use
-as a dev environment, so let this not distract you from the main goal of this test.
+## Usage
+Run the binary to calculate loan fees:
+```bash
+php bin/calculate-fee <amount> <term>
+```
 
-Please note that your solution will be run with PHP 8.4. You *MAY* use any version you want to develop your solution as
-long as it is backward compatible with the aforementioned version, but please note you are encouraged to use the
-latest features of the language.
+#### Example:
+```bash
+php bin/calculate-fee 11500 24
 
-You also **MAY** consider including a README that provides a high-level overview of your approach to the problem and
-your solution.
+# Outputs:
+460.00
+```
 
-## The Test
+## Project Structure
+```php
+src/
+├── Application/                     # Application layer
+│   ├── Config/                      # Configuration interface
+│   ├── Parser/                      # Parsers for input (e.g., LoanApplicationRequestParser)
+│   ├── Request/                     # DTOs for input validation and transfer
+│   ├── Service/                     # Application services (e.g., LoanFeeCalculatorService)
+│   └── Validator/                   # Validators for input (e.g., LoanApplicationRequestValidator)
+├── Domain/                          # Domain models
+│   └── Loan/                        # Loan-related domain objects  
+│       └── Repository/              # Repository interfaces
+├── Exception/                       # Custom exceptions
+├── Infrastructure/                  # Infrastructure layer
+│   ├── Config/                      # Configuration implementation
+│   └── Repository/                  # Repository implementations
+├── Util/                            # Helpers / Converters
+tests/                               # Test suite
+├── Unit/                            # Unit tests
+bin/                                 # Binary entry point
+└── calculate-fee                    # CLI entry point
+```
 
-The requirement is to build a fee calculator that given a monetary **amount** and a **term** (the contractual duration
-of the loan, expressed as a number of months) will produce an appropriate **fee** for a loan based on a fee structure
-and a set of rules described below.
+## Key Components
+- `Config` - Application configuration interface and implementation.
+- `LoanApplicationRequest` - DTO for validated input data.
+- `LoanApplicationRequestParser` - Parses and sanitizes raw input into a DTO.
+- `LoanApplicationRequestValidator` - Validates the parsed DTO against business rules.
+- `LoanApplication` – Domain model representing a loan request.
+- `LoanTerm` – Enum representing available terms (e.g., TWELVE_MONTH, TWENTY_FOUR_MONTH).
+- `LoanTermBreakpoints` – Domain model for loan term fee breakpoints.
+- `LoanTermRepositoryInterface` – Repository abstraction for retrieving loan breakpoints.
+- `LoanTermDummyRepository` – In-memory implementation of LoanTermRepositoryInterface
+- `LoanTermDummyRepositoryBreakpoints` - Hardcoded fee breakpoints used by LoanTermDummyRepository.
+- `LoanFeeCalculatorService` – Core service that calculates and rounds loan fees.
+- `LoanFeeInterpolatorService` – Handles linear interpolation between fee breakpoints.
+- `MoneyConverter` – Utility for converting between string/float and Money objects.
+- `NumericSanitizer` / `MoneyConverter` – Utility classes for parsing and formatting values.
 
-The calculator **MUST** be implemented as a CLI tool using the provided `bin/calculate-fee` script. It must take the
-mentioned **amount** and **term** as the only arguments and in that order. (Ex: `bin/calculate-fee 20,000.00 24`).
+## Test And Quality Tooling Results
+Results on submission from running tests, static analysis, and code style checks:
 
-Upon successful execution, the script **MUST** print the resulting **fee** to `stdout` followed by a line feed (`\n`) and
-exit with status code `zero`. The fee must be formatted numerically, with two decimal places and with no currency
-identifiers or symbols (Ex: `1,223.44`). Supporting different currencies is not required as we only care about monetary
-amounts.
+```bash
+vendor/bin/phpunit
+PHPUnit 12.3.8 by Sebastian Bergmann and contributors.
 
-Upon failure, the script must print any errors to `stderr` and exit with status code `non-zero`.
+Runtime:       PHP 8.4.12
+Configuration: /Users/adamchildren/Documents/GitHub/Lendable-assessment/phpunit.xml
 
-In terms of the business logic, implement your solution such that it fulfils the following requirements / premises:
+..........................................................        58 / 58 (100%)
 
-- The fee structure does not follow a formula.
-- Values in between the breakpoints should be interpolated linearly between the lower bound and upper bound that they fall between.
-- The number of breakpoints, their values, or storage might change.
-- The term can be either 12 or 24 (the number of months). You can also assume values will always be within this set.
-- The fee should be rounded up such that the sum of the fee and the loan amount is exactly divisible by £5.
-- The minimum amount for a loan is £1,000, and the maximum is £20,000.
-- You can assume values will always be within this range but **there may be any values up to 2 decimal places**.
+Time: 00:00.200, Memory: 16.00 MB
 
-Example inputs/outputs:
+OK (58 tests, 75 assertions)
+```
 
-| Loan Amount (in GBP) | Term (in Months) | Fee (in GBP) |
-|----------------------|------------------|--------------|
-| 11,500.00            | 24               | 460.00       |
-| 19,250.00            | 12               | 385.00       |
+```bash
+vendor/bin/phpstan analyse -l 6 src
+ 26/26 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+                                                                                                            
+ [OK] No errors      
+```
 
-# Fee Structure
+```bash
+vendor/bin/phpstan analyse -l 6 tests
+ 13/13 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+                                                                                                              
+ [OK] No error
+```
 
-The fee structure doesn't follow particular algorithm and it is possible that same fee will be applicable for different
-amounts.
+```bash
+vendor/bin/php-cs-fixer fix src
 
-You can assume the fee structure is in Pounds Stirling (GBP), although this is of little importance for the test.
+PHP CS Fixer 3.87.1 Alexander by Fabien Potencier, Dariusz Ruminski and contributors.
+PHP runtime: 8.4.12
+Running analysis on 1 core sequentially.
+You can enable parallel runner and speed up the analysis! Please see usage docs for more information.
+Loaded config default.
+Using cache file ".php-cs-fixer.cache".
+ 26/26 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
 
-### Term 12 Breakpoints
+Fixed 0 of 26 files in 0.011 seconds, 16.00 MB memory used
+```
 
-| Amount | Fee |
-|--------|-----|
-| 1,000  | 50  |
-| 2,000  | 90  |
-| 3,000  | 90  |
-| 4,000  | 115 |
-| 5,000  | 100 |
-| 6,000  | 120 |
-| 7,000  | 140 |
-| 8,000  | 160 |
-| 9,000  | 180 |
-| 10,000 | 200 |
-| 11,000 | 220 |
-| 12,000 | 240 |
-| 13,000 | 260 |
-| 14,000 | 280 |
-| 15,000 | 300 |
-| 16,000 | 320 |
-| 17,000 | 340 |
-| 18,000 | 360 |
-| 19,000 | 380 |
-| 20,000 | 400 |
+```bash
+vendor/bin/php-cs-fixer fix tests
+
+PHP CS Fixer 3.87.1 Alexander by Fabien Potencier, Dariusz Ruminski and contributors.
+PHP runtime: 8.4.12
+Running analysis on 1 core sequentially.
+You can enable parallel runner and speed up the analysis! Please see usage docs for more information.
+Loaded config default.
+Using cache file ".php-cs-fixer.cache".
+ 13/13 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
 
 
-### Term 24 Breakpoints
-
-| Amount | Fee |
-|--------|-----|
-| 1,000  | 70  |
-| 2,000  | 100 |
-| 3,000  | 120 |
-| 4,000  | 160 |
-| 5,000  | 200 |
-| 6,000  | 240 |
-| 7,000  | 280 |
-| 8,000  | 320 |
-| 9,000  | 360 |
-| 10,000 | 400 |
-| 11,000 | 440 |
-| 12,000 | 480 |
-| 13,000 | 520 |
-| 14,000 | 560 |
-| 15,000 | 600 |
-| 16,000 | 640 |
-| 17,000 | 680 |
-| 18,000 | 720 |
-| 19,000 | 760 |
-| 20,000 | 800 |
-
-# Submitting Your Solution
-
-You **SHOULD NOT** unnecessarily modify the directory structure of your test. Specially, **DO NOT** move the
-`bin/calculate-fee` command nor the `composer.json` from the root directory of your submission, as they are used to
-test your submission automatically.
-
-If you need to include other files (like docker setup, fixtures, etc) and you feel they would clutter the root
-directory, then you can place those files in a `.dev` folder inside the root directory.
-
-If your solution ends up not being runnable by our automated system due to not following these instructions then you
-risk failing your test.
-
-Please **DO NOT** make a public repository for your solution as **we will instantly fail you**. Instead, when you are
-done working with your solution, simply run the `bin/submit` script provided. This will pack your solution into a
-tarball that you must send to us. You risk failing your test if you send your solution in a different way.
+Fixed 0 of 13 files in 0.002 seconds, 16.00 MB memory used
+```
