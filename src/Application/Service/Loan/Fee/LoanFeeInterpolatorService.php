@@ -44,27 +44,26 @@ final readonly class LoanFeeInterpolatorService implements LoanFeeInterpolatorIn
         float $loanAmount,
         array $breakpoints
     ): array {
-        $keys = array_keys($breakpoints);
+        $lowerBound = null;
+        $upperBound = null;
 
-        $lower = null;
-        $upper = null;
-
-        foreach ($keys as $key) {
-            if ($key < $loanAmount) {
-                $lower = $key;
+        foreach ($breakpoints as $amount => $_) {
+            if ($amount < $loanAmount) {
+                $lowerBound = $amount;
+                continue;
             }
 
-            if ($key > $loanAmount && $lower !== null) {
-                $upper = $key;
+            if ($amount > $loanAmount && $lowerBound !== null) {
+                $upperBound = $amount;
                 break;
             }
         }
 
-        if ($lower === null || $upper === null) {
+        if ($lowerBound === null || $upperBound === null) {
             throw new InvalidArgumentException("Loan amount is out of interpolation bounds.");
         }
 
-        return [$lower, $upper];
+        return [$lowerBound, $upperBound];
     }
 
     /**
