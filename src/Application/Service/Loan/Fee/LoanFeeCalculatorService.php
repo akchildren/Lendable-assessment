@@ -15,7 +15,7 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
     public function __construct(
         private LoanTermRepositoryInterface  $loanTermRepository,
         private LoanFeeInterpolatorInterface $interpolator,
-        private int $roundingInterval = 5 // in major units (e.g., £5)
+        private int                          $roundingInterval = 5 // in major units (e.g., £5)
     ) {
     }
 
@@ -34,8 +34,10 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
      * @param LoanTermBreakPoints $breakpoints The breakpoints for interpolation.
      * @return Money The interpolated fee as a Money object.
      */
-    private function interpolatedFee(Money $loanAmount, LoanTermBreakpoints $breakpoints): Money
-    {
+    private function interpolatedFee(
+        Money               $loanAmount,
+        LoanTermBreakpoints $breakpoints
+    ): Money {
         $amountAsFloat = MoneyConverter::toFloat($loanAmount);
         $feeAsFloat = $this->interpolator->interpolate($amountAsFloat, $breakpoints->all());
 
@@ -49,10 +51,12 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
      * @param Money $fee The interpolated fee before rounding.
      * @return Money The rounded fee as a Money object.
      */
-    private function roundedFee(Money $loanAmount, Money $fee): Money
-    {
+    private function roundedFee(
+        Money $loanAmount,
+        Money $fee
+    ): Money {
         $interval = MoneyConverter::parseFloat($this->roundingInterval)->getAmount(); // to pence
-        $total = (int) $loanAmount->getAmount() + (int) $fee->getAmount();
+        $total = (int)$loanAmount->getAmount() + (int)$fee->getAmount();
         $remainder = $total % $interval;
 
         if ($remainder !== 0) {

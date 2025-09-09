@@ -12,14 +12,13 @@ use Lendable\Interview\Domain\Loan\LoanTerm;
  */
 final readonly class LoanTermParser implements ParserInterface
 {
-    public function __construct(
-        private mixed $rawTerm,
-    ) {
+    public function __construct(private mixed $rawTerm)
+    {
     }
 
     public function parse(): LoanTerm
     {
-        $term = (int) filter_var($this->rawTerm, FILTER_VALIDATE_INT);
-        return  LoanTerm::from($term);
+        $term = (int)filter_var($this->rawTerm, FILTER_VALIDATE_INT);
+        return LoanTerm::from($term);
     }
 }

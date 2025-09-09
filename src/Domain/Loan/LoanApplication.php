@@ -24,18 +24,4 @@ final readonly class LoanApplication implements DomainModelInterface
     {
         return $this->term;
     }
-
-    /**
-     * Returns the domain object as an array
-     * Useful for serialization, logging, or testing.
-     *
-     * @return array<string, mixed> Associative array representation of the domain object.
-     */
-    public function toArray(): array
-    {
-        return [
-            'amount' => $this->amount,
-            'term' => $this->term,
-        ];
-    }
 }

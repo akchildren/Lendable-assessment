@@ -17,7 +17,10 @@ final readonly class LoanFeeInterpolatorService implements LoanFeeInterpolatorIn
             return (float)$breakpoints[(int)round($loanAmount)];
         }
 
-        [$lowerAmount, $upperAmount] = $this->findSurroundingBreakpoints($loanAmount, $breakpoints);
+        [$lowerAmount, $upperAmount] = $this->findSurroundingBreakpoints(
+            loanAmount: $loanAmount,
+            breakpoints: $breakpoints
+        );
 
         return $this->linearInterpolation(
             loanAmount: $loanAmount,
@@ -37,8 +40,10 @@ final readonly class LoanFeeInterpolatorService implements LoanFeeInterpolatorIn
      * @return array{int, int} [lowerBreakpoint, upperBreakpoint]
      * @throws InvalidArgumentException if no surrounding breakpoints are found
      */
-    private function findSurroundingBreakpoints(float $loanAmount, array $breakpoints): array
-    {
+    private function findSurroundingBreakpoints(
+        float $loanAmount,
+        array $breakpoints
+    ): array {
         $keys = array_keys($breakpoints);
 
         $lower = null;
