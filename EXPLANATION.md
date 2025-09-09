@@ -54,7 +54,6 @@ src/
 │   └── Service/            # Application services (e.g., LoanFeeCalculatorService)
 ├── Domain/               # Domain models (e.g., LoanApplication, LoanTerm)
 │   └── Loan/               # Loan related domain objects  
-├── Enum/                 # Enums (e.g., LoanTerm)
 ├── Exception/            # Custom exceptions
 ├── Infrastructure /      # Infrastructure layer
 │   └──  Repository         # Repository interfaces and implementations

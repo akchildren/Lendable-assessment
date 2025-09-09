@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lendable\Interview\Enum\Loan\Term;
+namespace Lendable\Interview\Infrastructure\Repository\Loan\Term;
 
 use Lendable\Interview\Domain\Loan\LoanTerm;
 

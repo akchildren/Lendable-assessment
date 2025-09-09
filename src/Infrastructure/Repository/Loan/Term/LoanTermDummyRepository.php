@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lendable\Interview\Infrastructure\Repository\Loan\Term;
 
 use Lendable\Interview\Domain\Loan\LoanTerm;
-use Lendable\Interview\Enum\Loan\Term\LoanTermDummyBreakpoints;
 
 /**
  * Dummy repository for loan terms.
