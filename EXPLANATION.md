@@ -5,7 +5,9 @@ A PHP 8.4 binary that calculates loan fees based on the requested loan amount an
 ## Features
 - Calculate loan fees for supported loan terms.
 - Configurable fee rounding and validation rules.
-- Built with domain design concepts (Domain models, DTOs, Services, Repositories).
+- Handles input parsing and validation.
+- Uses moneyphp/money for accurate monetary calculations.
+- Built with domain design concepts.
 - Fully covered by automated unit tests and static analysis tools.
 
 ## Requirements
@@ -41,60 +43,66 @@ php bin/calculate-fee <amount> <term>
 
 #### Example:
 ```bash
-calculate-fee 11,500.00 24
-```
+php bin/calculate-fee 11500 24
 
-#### Output:
-```bash
+# Outputs:
 460.00
 ```
 
 ## Project Structure
 ```php
 src/
-├── Application/          # Application layer
-│   ├── Request/            # DTOs for input validation and transfer
-│   │   │── Parser/             # Parsers for input (e.g., LoanApplicationRequestParser)
-│   │   └── Validator/          # Validators for input (e.g., LoanApplicationRequestValidator)
-│   └── Service/            # Application services (e.g., LoanFeeCalculatorService)
-├── Domain/               # Domain models (e.g., LoanApplication, LoanTerm)
-│   └── Loan/               # Loan related domain objects  
-├── Exception/            # Custom exceptions
-├── Infrastructure /      # Infrastructure layer
-│   └──  Repository         # Repository interfaces and implementations
-├── Util/                 # Helpers / Converters
-tests/
-├── Unit/                 # Unit tests
-bin/
-└── calculate-fee         # CLI entry point
+├── Application/                     # Application layer
+│   ├── Config/                      # Configuration interface
+│   ├── Parser/                      # Parsers for input (e.g., LoanApplicationRequestParser)
+│   ├── Request/                     # DTOs for input validation and transfer
+│   ├── Service/                     # Application services (e.g., LoanFeeCalculatorService)
+│   └── Validator/                   # Validators for input (e.g., LoanApplicationRequestValidator)
+├── Domain/                          # Domain models
+│   └── Loan/                        # Loan-related domain objects  
+│       └── Repository/              # Repository interfaces
+├── Exception/                       # Custom exceptions
+├── Infrastructure/                  # Infrastructure layer
+│   ├── Config/                      # Configuration implementation
+│   └── Repository/                  # Repository implementations
+├── Util/                            # Helpers / Converters
+tests/                               # Test suite
+├── Unit/                            # Unit tests
+bin/                                 # Binary entry point
+└── calculate-fee                    # CLI entry point
 ```
 
 ## Key Components
-- LoanApplicationRequest - DTO for validated input data.
-- LoanApplication – Domain model representing a loan request.
-- LoanTerm – Enum representing available terms (e.g., TWELVE_MONTH, TWENTY_FOUR_MONTH).
-- LoanTermBreakpoints – Domain model for loan term fee breakpoints.
-- LoanTermRepositoryInterface – Repository abstraction for retrieving loan breakpoints.
-- LoanTermDummyRepository – In-memory implementation of LoanTermRepositoryInterface (using hardcoded data from readme).
-- LoanFeeCalculatorService – Core service that calculates and rounds loan fees.
-- LoanFeeInterpolatorService – Handles linear interpolation between fee breakpoints.
-- MoneyConverter – Utility for converting between string/float and Money objects.
-- NumericSanitizer / MoneyConverter – Utility classes for parsing and formatting values.
+- `Config` - Application configuration interface and implementation.
+- `LoanApplicationRequest` - DTO for validated input data.
+- `LoanApplicationRequestParser` - Parses and sanitizes raw input into a DTO.
+- `LoanApplicationRequestValidator` - Validates the parsed DTO against business rules.
+- `LoanApplication` – Domain model representing a loan request.
+- `LoanTerm` – Enum representing available terms (e.g., TWELVE_MONTH, TWENTY_FOUR_MONTH).
+- `LoanTermBreakpoints` – Domain model for loan term fee breakpoints.
+- `LoanTermRepositoryInterface` – Repository abstraction for retrieving loan breakpoints.
+- `LoanTermDummyRepository` – In-memory implementation of LoanTermRepositoryInterface
+- `LoanTermDummyRepositoryBreakpoints` - Hardcoded fee breakpoints used by LoanTermDummyRepository.
+- `LoanFeeCalculatorService` – Core service that calculates and rounds loan fees.
+- `LoanFeeInterpolatorService` – Handles linear interpolation between fee breakpoints.
+- `MoneyConverter` – Utility for converting between string/float and Money objects.
+- `NumericSanitizer` / `MoneyConverter` – Utility classes for parsing and formatting values.
 
 ## Test And Quality Tooling Results
 Results on submission from running tests, static analysis, and code style checks:
 
 ```bash
+vendor/bin/phpunit
 PHPUnit 12.3.8 by Sebastian Bergmann and contributors.
 
 Runtime:       PHP 8.4.12
 Configuration: /Users/adamchildren/Documents/GitHub/Lendable-assessment/phpunit.xml
 
-.......................................................           55 / 55 (100%)
+..........................................................        58 / 58 (100%)
 
-Time: 00:00.204, Memory: 16.00 MB
+Time: 00:00.200, Memory: 16.00 MB
 
-OK (55 tests, 72 assertions)
+OK (58 tests, 75 assertions)
 ```
 
 ```bash
@@ -106,7 +114,7 @@ vendor/bin/phpstan analyse -l 6 src
 
 ```bash
 vendor/bin/phpstan analyse -l 6 tests
- 12/12 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+ 13/13 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
                                                                                                               
  [OK] No error
 ```
@@ -134,8 +142,8 @@ Running analysis on 1 core sequentially.
 You can enable parallel runner and speed up the analysis! Please see usage docs for more information.
 Loaded config default.
 Using cache file ".php-cs-fixer.cache".
- 12/12 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+ 13/13 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
 
 
-Fixed 0 of 12 files in 0.002 seconds, 16.00 MB memory used
+Fixed 0 of 13 files in 0.002 seconds, 16.00 MB memory used
 ```
