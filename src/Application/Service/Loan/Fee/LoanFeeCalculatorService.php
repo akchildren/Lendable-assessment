@@ -60,7 +60,7 @@ final readonly class LoanFeeCalculatorService implements LoanFeeCalculatorInterf
         $remainder = $total % $interval;
 
         if ($remainder !== 0) {
-            $fee = MoneyConverter::parseFloat(($fee->getAmount() + ($interval - $remainder)) / 100);
+            $fee = MoneyConverter::parseFloat(((int)$fee->getAmount() + ($interval - $remainder)) / 100);
         }
 
         return $fee;
