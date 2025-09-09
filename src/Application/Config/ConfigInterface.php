@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lendable\Interview\Infrastructure\Config;
+namespace Lendable\Interview\Application\Config;
 
 interface ConfigInterface
 {

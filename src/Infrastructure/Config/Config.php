@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lendable\Interview\Infrastructure\Config;
 
+use Lendable\Interview\Application\Config\ConfigInterface;
+
 /**
  * Configuration class to access environment variables with defaults.
  * @note This implementation assumes that environment variables are provided as an associative array.
