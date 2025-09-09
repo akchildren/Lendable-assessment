@@ -1,7 +1,12 @@
 # Loan Fee Calculator
 
-A PHP 8.4 application that calculates loan fees based on requested loan amount and loan term duration.
-The project demonstrates domain-driven design principles, data transfer objects, repositories, and services for interpolation and rounding of loan fees.
+A PHP 8.4 binary that calculates loan fees based on the requested loan amount and loan term duration.
+
+## Features
+- Calculate loan fees for supported loan terms.
+- Configurable fee rounding and validation rules.
+- Built with domain design concepts (Domain models, DTOs, Services, Repositories).
+- Fully covered by automated unit tests and static analysis tools.
 
 ## Requirements
 - PHP 8.4+
@@ -19,9 +24,9 @@ cd loan-fee-calculator
 composer install
 cp .env.example .env # create .env from example (optional as default values are set)
 ```
-## Configuration
+## Configuration (Optional)
 
-The application is configured via .env. Example:
+The application can be configured via an `.env` file :
 ```
 MIN_LOAN_AMOUNT=1000
 MAX_LOAN_AMOUNT=20000
@@ -136,9 +141,3 @@ Using cache file ".php-cs-fixer.cache".
 
 Fixed 0 of 11 files in 0.002 seconds, 16.00 MB memory used
 ```
-
-## Development Notes
-- All PHP files use declare(strict_types=1); for strict typing.
-- DTOs are immutable (readonly) to ensure safe data transfer.
-- Repositories can be swapped (dummy, in-memory, database-backed) without changing the service layer.
-- Fee rounding interval is configurable via .env.
