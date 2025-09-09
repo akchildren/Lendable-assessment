@@ -47,15 +47,18 @@ calculate-fee 11,500.00 24
 ## Project Structure
 ```php
 src/
+├── Application/          # Application layer
+│   ├── Request/            # DTOs for input validation and transfer
+│   └── Service/            # Application services (e.g., LoanFeeCalculatorService)
 ├── Domain/               # Domain models (e.g., LoanApplication, LoanTerm)
-├── DataTransferObject/   # DTOs for safely transporting data
-├── Repository/           # Repository interfaces + implementations
-├── Service/              # Core services (fee calculator, interpolation)
-├── Util/                 # Helpers / sanitizers / converters
-├── Exception/            # Domain and validation exceptions
+│   └── Loan/             
+├── Enum/                 # Enums (e.g., LoanTerm)
+├── Exception/            # Custom exceptions
+├── Infrastructure /      # Infrastructure layer
+│   └──  Repository         # Repository interfaces and implementations
+├── Util/                 # Helpers / Converters
 tests/
 ├── Unit/                 # Unit tests
-├── Integration/          # (optional) Integration tests
 bin/
 └── calculate-fee         # CLI entry point
 ```
