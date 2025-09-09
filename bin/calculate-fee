@@ -8,6 +8,7 @@ use Lendable\Interview\Application\Service\Loan\Fee\LoanFeeCalculatorInterface;
 use Lendable\Interview\Application\Service\Loan\Fee\LoanFeeCalculatorService;
 use Lendable\Interview\Application\Service\Loan\Fee\LoanFeeInterpolatorService;
 use Lendable\Interview\Domain\Loan\LoanApplication;
+use Lendable\Interview\Infrastructure\Config\Config;
 use Lendable\Interview\Infrastructure\Repository\Loan\Term\LoanTermDummyRepository;
 use Lendable\Interview\Util\MoneyConverter;
 
@@ -16,9 +17,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__) );
 $dotenv->safeLoad(); // load .env file if exists, but do not throw if not to allow binary to work without it
 
-$minAmount = isset($_ENV['MIN_LOAN_AMOUNT']) ? (float) $_ENV['MIN_LOAN_AMOUNT'] : 1000.0;
-$maxAmount = isset($_ENV['MAX_LOAN_AMOUNT']) ? (float) $_ENV['MAX_LOAN_AMOUNT'] : 20000.0;
-$roundingInterval = isset($_ENV['FEE_ROUNDING_INTERVAL']) ? (int) $_ENV['FEE_ROUNDING_INTERVAL'] : 5;
+$config = new Config($_ENV);
 
 /**
  * Please note that you CAN modify this file in any way to suit your needs, but be advised that it MUST conform to
@@ -29,8 +28,8 @@ try {
     $request = new LoanApplicationRequest(
         rawAmount: $argv[1] ?? null,
         rawTerm: $argv[2] ?? null,
-        minAmount: $minAmount,
-        maxAmount: $maxAmount,
+        minAmount: (float) $config->getMinAmount(),
+        maxAmount: (float) $config->getMaxAmount(),
     );
 
     $request->validate();
@@ -39,7 +38,7 @@ try {
     $loanData = new LoanApplication(...$request->safe());
 
     // Execute calculator
-    $calculator = getFeeCalculator($roundingInterval);
+    $calculator = getFeeCalculator((int) $config->getRoundingInterval());
     $fee = $calculator->calculate($loanData);
 
     printf(
