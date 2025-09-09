@@ -3,12 +3,12 @@
 
 declare(strict_types=1);
 
+use Lendable\Interview\Application\Request\Loan\LoanApplicationRequest;
+use Lendable\Interview\Application\Service\Loan\Fee\LoanFeeCalculatorInterface;
+use Lendable\Interview\Application\Service\Loan\Fee\LoanFeeCalculatorService;
+use Lendable\Interview\Application\Service\Loan\Fee\LoanFeeInterpolatorService;
 use Lendable\Interview\Domain\Loan\LoanApplication;
-use Lendable\Interview\Repository\Loan\Term\LoanTermDummyRepository;
-use Lendable\Interview\Request\Loan\LoanApplicationRequest;
-use Lendable\Interview\Service\Loan\Fee\LoanFeeCalculatorInterface;
-use Lendable\Interview\Service\Loan\Fee\LoanFeeCalculatorService;
-use Lendable\Interview\Service\Loan\Fee\LoanFeeInterpolatorService;
+use Lendable\Interview\Infrastructure\Repository\Loan\Term\LoanTermDummyRepository;
 use Lendable\Interview\Util\MoneyConverter;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';

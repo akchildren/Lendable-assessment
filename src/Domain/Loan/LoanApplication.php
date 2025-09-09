@@ -1,10 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lendable\Interview\Domain\Loan;
 
 use Lendable\Interview\Domain\DomainModelInterface;
-use Lendable\Interview\Enum\Loan\Term\LoanTerm;
 use Money\Money;
 
 final readonly class LoanApplication implements DomainModelInterface

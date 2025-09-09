@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lendable\Interview\Unit\Binary;
 
-use Lendable\Interview\Enum\Loan\Term\LoanTerm;
+use Lendable\Interview\Domain\Loan\LoanTerm;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

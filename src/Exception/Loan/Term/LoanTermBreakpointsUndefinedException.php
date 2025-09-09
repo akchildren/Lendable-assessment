@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Lendable\Interview\Exception\Loan\Term;
 
 use InvalidArgumentException;
-use Lendable\Interview\Enum\Loan\Term\LoanTerm;
+use Lendable\Interview\Domain\Loan\LoanTerm;
 
 final class LoanTermBreakpointsUndefinedException extends InvalidArgumentException
 {
