@@ -6,7 +6,7 @@ namespace Lendable\Interview\Application\Service\Loan\Fee;
 
 use Lendable\Interview\Domain\Loan\LoanApplication;
 use Lendable\Interview\Domain\Loan\LoanTermBreakpoints;
-use Lendable\Interview\Infrastructure\Repository\Loan\Term\LoanTermRepositoryInterface;
+use Lendable\Interview\Domain\Loan\Repository\Term\LoanTermRepositoryInterface;
 use Lendable\Interview\Util\MoneyConverter;
 use Money\Money;
 

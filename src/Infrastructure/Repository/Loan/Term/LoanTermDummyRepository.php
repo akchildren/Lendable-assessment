@@ -20,6 +20,6 @@ final class LoanTermDummyRepository extends AbstractLoanTermRepository
      */
     protected function fetchBreakpoints(LoanTerm $term): array
     {
-        return LoanTermDummyBreakpoints::DATA[$term->value];
+        return LoanTermDummyRepositoryBreakpoints::DATA[$term->value];
     }
 }

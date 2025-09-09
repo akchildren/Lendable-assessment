@@ -12,7 +12,7 @@ use Lendable\Interview\Domain\Loan\LoanTerm;
  * @note This is strictly static data representation.
  * @see LoanTerm
  */
-final readonly class LoanTermDummyBreakpoints
+final readonly class LoanTermDummyRepositoryBreakpoints
 {
     /**
      * @var array<int, array<int, int>>

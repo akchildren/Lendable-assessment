@@ -6,6 +6,7 @@ namespace Lendable\Interview\Infrastructure\Repository\Loan\Term;
 
 use Lendable\Interview\Domain\Loan\LoanTerm;
 use Lendable\Interview\Domain\Loan\LoanTermBreakpoints;
+use Lendable\Interview\Domain\Loan\Repository\Term\LoanTermRepositoryInterface;
 use Lendable\Interview\Exception\Loan\Term\LoanTermBreakpointsUndefinedException;
 
 abstract class AbstractLoanTermRepository implements LoanTermRepositoryInterface
