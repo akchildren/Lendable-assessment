@@ -2,7 +2,7 @@
 
 namespace Lendable\Interview\Domain\Loan;
 
-use Lendable\Interview\Exception\Loan\Term\LoanTermBreakpointsUndefinedException;
+use Lendable\Interview\Domain\DomainModelInterface;
 
 final readonly class LoanTermBreakpoints implements DomainModelInterface
 {
