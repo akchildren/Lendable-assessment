@@ -119,19 +119,3 @@ You can assume the fee structure is in Pounds Stirling (GBP), although this is o
 | 18,000 | 720 |
 | 19,000 | 760 |
 | 20,000 | 800 |
-
-# Submitting Your Solution
-
-You **SHOULD NOT** unnecessarily modify the directory structure of your test. Specially, **DO NOT** move the
-`bin/calculate-fee` command nor the `composer.json` from the root directory of your submission, as they are used to
-test your submission automatically.
-
-If you need to include other files (like docker setup, fixtures, etc) and you feel they would clutter the root
-directory, then you can place those files in a `.dev` folder inside the root directory.
-
-If your solution ends up not being runnable by our automated system due to not following these instructions then you
-risk failing your test.
-
-Please **DO NOT** make a public repository for your solution as **we will instantly fail you**. Instead, when you are
-done working with your solution, simply run the `bin/submit` script provided. This will pack your solution into a
-tarball that you must send to us. You risk failing your test if you send your solution in a different way.
